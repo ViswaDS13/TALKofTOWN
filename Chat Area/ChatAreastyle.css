@@ -1,0 +1,112 @@
+/* 1 inch = 96px*/
+.ChatArea {
+    margin-left: 12%;
+    margin-top: 20px;
+    background: #f4f4f4;
+    display: flex;
+    overflow: hidden;
+    border-radius: 15px;
+    padding: 20px;
+    width: 75%;
+    height: 75%;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+#Settings {
+    position: fixed;   /* always at corner */
+    bottom: 20px;
+    right: 20px;
+}
+
+#Settings img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    cursor: pointer;
+}
+
+#settingsPanel{
+    display:none;
+    background:#eee;
+    padding:20px;
+    width:200px;
+}
+
+#Themes:hover{
+    cursor: pointer;
+}
+
+#themeSelector:hover{
+    cursor: pointer;
+}
+
+#Themes{
+    display: none;
+}
+
+#colorPalete{
+    position: relative;
+}
+
+#ConfirmColor {
+    display: inline-block; /* keeps it in the same line */
+    visibility: hidden;    /* hides it but preserves space */
+}
+
+#Delete:hover{
+    cursor: pointer;
+    color: red;
+    text-decoration: underline;
+}
+
+#RequestBox{
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: #000000;
+    border-radius:25px;
+    background-color: rgb(186, 61, 61);
+    font-size: 20px;
+    color: #eee;
+    padding: 50px;
+    text-align: center;
+}
+
+#RequestBox button{
+    font-weight: bold;
+    cursor: pointer;
+    font-size: medium;
+}
+
+#yesDelete{
+    background-color: red;
+    color: #eee;
+}
+
+#noDelete{
+    background-color: green;
+    color: #eee;
+}
+
+#sendOff span{
+    display: none;
+    position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: #000000;
+    border-radius:25px;
+    font-size: 20px;
+    color: #eee;
+    padding: 50px;
+    text-align: center;
+    z-index: 9999;
+}
+#forYes{
+    background-color: rgb(160, 0, 0);
+}
+#forNo{
+    background-color: darkgreen;
+}
