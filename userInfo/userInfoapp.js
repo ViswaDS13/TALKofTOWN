@@ -9,7 +9,8 @@ import {
     signInWithEmailAndPassword,
     GoogleAuthProvider,
     signInWithPopup,
-    onAuthStateChanged
+    onAuthStateChanged,
+    signOut
 } from "https://www.gstatic.com/firebasejs/10.3.0/firebase-auth.js";
 import {
     getFirestore,
@@ -41,14 +42,27 @@ const provider = new GoogleAuthProvider();
 const db = getFirestore(app);
 
 // ----------------------------
-// Helper function to add user to Firestore
+// Helper: add user to Firestore
 // ----------------------------
 async function addUserToFirestore(uid, email) {
-    const userRef = doc(db, "userDetails", "preSetFileDoNotDelete", "Userinfo", uid);
+    const userRef = doc(db, "userDetails", uid);
     await setDoc(userRef, {
         email: email,
         createdAt: new Date()
     });
+}
+
+// ----------------------------
+// UI Helpers
+// ----------------------------
+function showLoginUI() {
+    document.getElementById("Details").style.display = "block"; // login box
+    document.querySelector("main.ChatArea").style.display = "none"; // chat area
+}
+
+function showChatUI() {
+    document.getElementById("Details").style.display = "none";
+    document.querySelector("main.ChatArea").style.display = "block";
 }
 
 // ----------------------------
@@ -86,7 +100,7 @@ document.getElementById("login").addEventListener("click", async () => {
 
     try {
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
-        const userRef = doc(db, "userDetails", "preSetFileDoNotDelete", "Userinfo", userCredential.user.uid);
+        const userRef = doc(db, "userDetails", userCredential.user.uid);
         const userSnap = await getDoc(userRef);
 
         if (!userSnap.exists()) {
@@ -108,7 +122,7 @@ document.getElementById("googleLogin").addEventListener("click", async () => {
         const result = await signInWithPopup(auth, provider);
         const user = result.user;
 
-        const userRef = doc(db, "userDetails", "preSetFileDoNotDelete", "Userinfo", user.uid);
+        const userRef = doc(db, "userDetails", user.uid);
         const userSnap = await getDoc(userRef);
 
         if (!userSnap.exists()) {
@@ -122,12 +136,29 @@ document.getElementById("googleLogin").addEventListener("click", async () => {
 });
 
 // ----------------------------
-// Auth state listener
+// Auth State Listener
 // ----------------------------
 onAuthStateChanged(auth, user => {
     if (user) {
         console.log("User logged in:", user.email);
+        showChatUI();
     } else {
         console.log("No user logged in");
+        showLoginUI();
+    }
+});
+
+// ----------------------------
+// Logout
+// ----------------------------
+document.addEventListener("click", e => {
+    if (e.target && e.target.id === "logoutBtn") {
+        signOut(auth)
+            .then(() => {
+                alert("Logged out successfully!");
+            })
+            .catch(err => {
+                alert("Logout failed: " + err.message);
+            });
     }
 });
