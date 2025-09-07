@@ -1,5 +1,5 @@
-// This is for Settings button 
-const settingsIcon = document.querySelector("#settingsIcon"); 
+
+const settingsIcon = document.querySelector("#settingsIcon");
 const settingsDiv = document.querySelector("#settingsPanel");
 const chatThemeSelector = document.querySelector("#themeSelector");
 const chatThemes = document.querySelector("#Themes");
@@ -18,97 +18,182 @@ const Defalut = document.querySelector("#Defalut");
 const ConfirmColor = document.querySelector("#ConfirmColor");
 
 
-settingsIcon.addEventListener("click", () =>{
-    if(settingsDiv.style.display === "none" || settingsDiv.style.display === ""){
-        settingsDiv.style.display = "block"; 
-    } 
-    else{
-        settingsDiv.style.display = "none"; 
-    }
-})
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.3.0/firebase-app.js";
+import {
+  getAuth,
+  onAuthStateChanged,
+} from "https://www.gstatic.com/firebasejs/10.3.0/firebase-auth.js";
+import {
+  getFirestore,
+  doc,
+  setDoc,
+  collection,
+  addDoc,
+  onSnapshot,
+  query,
+  orderBy,
+  getDocs,
+  collectionGroup,
+  where,
+  serverTimestamp,
+  getDoc,
+} from "https://www.gstatic.com/firebasejs/10.3.0/firebase-firestore.js";
 
-chatThemeSelector.addEventListener("click", () =>{
-    if(chatThemes.style.display === "none" || chatThemes.style.display === ""){
-        chatThemes.style.display = "block";
-    }
-    else{
-        chatThemes.style.display = "none";
-    }
-})
+const firebaseConfig = {
+  apiKey: "AIzaSyA5x5aib61iGtI_REZNNvS-_ClA-g6OEFY",
+  authDomain: "chat-project-talkoftown.firebaseapp.com",
+  projectId: "chat-project-talkoftown",
+  storageBucket: "chat-project-talkoftown.appspot.com",
+  messagingSenderId: "833443503115",
+  appId: "1:833443503115:web:03302535248c646b30fb0e",
+  measurementId: "G-HS4TSFR6D0",
+};
 
-
-deleteAcc.addEventListener("click", () =>{
-    if(request.style.display === "none" || request.style.display === ""){
-        request.style.display = "block";
-        settingsDiv.style.display = "none";
-    }
-    else{
-        request.style.display = "none"; 
-        settingsDiv.style.display = "none";
-    }
-    
-})
-
-confirmYes.addEventListener("click", ()=>{
-    sendOff.style.display = "block";    // show parent box
-    request.style.display = "none";
-    settingsIcon.style.display = "none";
-    settingsDiv.style.display = "none";
-    chatBar.style.display = "none";
-    sendOffYes.style.display = "block"; // show YES msg
-    sendOffNo.style.display = "none";   // hide NO msg
-})
-
-confirmNo.addEventListener("click", ()=>{
-    sendOff.style.display = "block";    // show parent box
-    request.style.display = "none";
-    settingsDiv.style.display = "none";
-    sendOffNo.style.display = "block";  // show NO msg
-    sendOffYes.style.display = "none";  // hide YES msg
-    setTimeout(() => {
-        sendOffNo.style.display = "none";
-    }, 4000);
-})
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
 
 
+const favEmailInput = document.querySelector("#favEmailInput");
+const favSlotSelect = document.querySelector("#favSlotSelect");
+const setFavBtn = document.querySelector("#setFavBtn");
+const messagesBox = document.querySelector("#messagesBox");
+const messageInput = document.querySelector("#messageInput");
+const sendMessageBtn = document.querySelector("#sendMessageBtn");
+const favDivs = document.querySelectorAll("#chatBar .favorites");
 
-/// This is to get the Background gradient colors and also for the chat theme
 
-function adjustColor(col, amount) {
-  let usePound = false;
-  if (col[0] === "#") {
-    col = col.slice(1);
-    usePound = true;
-  }
+let currentUser = null;
+let currentChatId = null;
+let unsubscribeMessages = null;
 
-  let num = parseInt(col, 16);
+const userDocPath = (uid) => ["Users", uid];
 
-  let r = (num >> 16) + amount;
-  let g = ((num >> 8) & 0x00FF) + amount;
-  let b = (num & 0x0000FF) + amount;
+const getChatId = (uidA, uidB) => "chat_" + [uidA, uidB].sort().join("_");
 
-  r = Math.min(255, Math.max(0, r));
-  g = Math.min(255, Math.max(0, g));
-  b = Math.min(255, Math.max(0, b));
-
-  return (usePound ? "#" : "") + ((r << 16) | (g << 8) | b).toString(16).padStart(6, '0');
+// Find a user by email
+async function findUserByEmail(email) {
+  const q = query(collection(db, "Users"), where("email", "==", email));
+  const snaps = await getDocs(q);
+  if (snaps.empty) return null;
+  return { uid: snaps.docs[0].id, data: snaps.docs[0].data() };
 }
 
-colorPicker.addEventListener("input", (e) => {
-  const baseColor = e.target.value;
-  const darker = adjustColor(baseColor, -100); // darker version
-  const lighter = adjustColor(baseColor, 60);  // lighter version
-  body.style.background = `linear-gradient(to left, ${baseColor}, ${darker})`;
-  chatArea.style.background = lighter;
-  ConfirmColor.style.visibility = "visible";
+
+async function setFavorite(slot, email) {
+  if (!currentUser) return alert("Sign in first");
+
+  const found = await findUserByEmail(email);
+  if (!found) return alert("No user with that email");
+
+  const userDocPath = (uid) => ["Users", uid];
+  await setDoc(
+    userRef,
+    {
+      favorites: { [slot]: { uid: found.uid, email } },
+    },
+    { merge: true }
+  );
+
+  favDivs.forEach((div) => {
+    if (div.textContent.includes(slot.replace("fav", "Fav "))) {
+      div.innerHTML = `<img src="./src/favorites_temp.png" class="pfp"> ${email}`;
+      div.addEventListener("click", () => openChatWithUid(found.uid, email));
+    }
+  });
+
+  const favSetup = document.getElementById("favSetup");
+  if (favSetup) favSetup.style.display = "none";
+
+  openChatWithUid(found.uid, email);
+}
+
+
+async function openChatWithUid(otherUid, otherEmail) {
+  if (unsubscribeMessages) unsubscribeMessages();
+  currentChatId = getChatId(currentUser.uid, otherUid);
+  messagesBox.innerHTML = "";
+
+  const q = query(
+    collection(db, "chats", currentChatId, "messages"),
+    orderBy("timestamp", "asc")
+  );
+  unsubscribeMessages = onSnapshot(q, (snap) => {
+    messagesBox.innerHTML = "";
+    snap.forEach((docSnap) => {
+      const msg = docSnap.data();
+      const div = document.createElement("div");
+      div.className = msg.sender === currentUser.uid ? "me" : "them";
+      div.textContent = msg.text;
+      messagesBox.appendChild(div);
+    });
+    messagesBox.scrollTop = messagesBox.scrollHeight;
+  });
+}
+
+async function sendMessage() {
+  if (!currentChatId) return alert("Choose a favorite to chat");
+  const text = messageInput.value.trim();
+  if (!text) return;
+  const msgRef = collection(db, "chats", currentChatId, "messages");
+  await addDoc(msgRef, {
+    sender: currentUser.uid,
+    text,
+    timestamp: serverTimestamp(),
+  });
+  messageInput.value = "";
+}
+
+
+setFavBtn.addEventListener("click", () => {
+  setFavorite(favSlotSelect.value, favEmailInput.value.trim());
 });
 
-ConfirmColor.addEventListener("click", () =>{
-    settingsDiv.style.display = "none";
-})
+sendMessageBtn.addEventListener("click", sendMessage);
+messageInput.addEventListener("keypress", (e) => {
+  if (e.key === "Enter") {
+    e.preventDefault();
+    sendMessage();
+  }
+});
 
-Defalut.addEventListener("click" , ()=>{
-    body.style.background = `background: linear-gradient(to left, rgb(174, 49, 49), rgb(125, 30, 117), rgb(104, 74, 203));`;
-    chatArea.style.background = "#f4f4f4";
-    settingsDiv.style.display = "none"; 
-})
+
+onAuthStateChanged(auth, async (user) => {
+  currentUser = user || null;
+  if (!currentUser) return;
+
+  const userDocPath = (uid) => ["Users", uid];
+  const snap = await getDoc(userRef);
+  if (snap.exists() && snap.data().favorites) {
+    Object.entries(snap.data().favorites).forEach(([slot, fav]) => {
+      favDivs.forEach((div) => {
+        if (div.textContent.includes(slot.replace("fav", "Fav "))) {
+          div.innerHTML = `<img src="./src/favorites_temp.png" class="pfp"> ${fav.email}`;
+          div.addEventListener("click", () =>
+            openChatWithUid(fav.uid, fav.email)
+          );
+        }
+      });
+    });
+  }
+});
+
+
+settingsIcon.addEventListener("click", () => {
+  settingsDiv.style.display =
+    settingsDiv.style.display === "none" ? "block" : "none";
+});
+
+chatThemeSelector.addEventListener("click", () => {
+  chatThemes.style.display =
+    chatThemes.style.display === "none" ? "block" : "none";
+});
+
+ConfirmColor.addEventListener("click", () => {
+  body.style.background = colorPicker.value;
+});
+
+Defalut.addEventListener("click", () => {
+  body.style.background =
+    "linear-gradient(to left, rgb(174, 49, 49), rgb(125, 30, 117), rgb(104, 74, 203))";
+});
