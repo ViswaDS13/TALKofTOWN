@@ -1,91 +1,124 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TALKofTOWN</title>
-
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="./FAvChatBar/favChatBarstyle.css">
-    <link rel="stylesheet" href="./Chat Area/ChatAreastyle.css">
-    <link rel="stylesheet" href="./userInfo/entryStyle.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TALKofTOWN</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="./FAvChatBar/favChatBarstyle.css">
+  <link rel="stylesheet" href="./Chat Area/ChatAreastyle.css">
+  <link rel="stylesheet" href="./userInfo/entryStyle.css">
 </head>
+<body>
 
-<body id="backGround">
-    
-    <div id="chatBar">
-        <div class="favorites">Fav 1</div>
-        <div class="favorites">Fav 2</div>
-        <div class="favorites">Fav 3</div>
-        <div class="favorites">Fav 4</div>
-        <div class="favorites">Fav 5</div>
-    </div>
+<!-- Login Section -->
+<div id="loginSection">
+  <h1 id="heading">Login / Sign Up</h1>
+  <div id="Details">
+    <input type="email" id="email" placeholder="Email">
+    <input type="password" id="password" placeholder="Password">
+    <button id="signup">Sign Up</button>
+    <button id="login">Login</button>
+    <button id="googleLogin">Login with Google</button>
+  </div>
+</div>
 
-    <img src="./src/infoIcon.png" id="infoIcon">
-    <div id="info">ALL THE INFORMATION ABOUT THE WEBSITE</div>
+<!-- Main Chat Section (hidden initially) -->
+<div id="mainChatSection" style="display:none">
 
-    <main class="ChatArea">
-        <div>
-            Chat Area
-            <div id="RequestBox">
-                Are you sure you want to Delete Account? 
-                <br><br>
-                <button id="yesDelete">YES</button>
-                <br><br>
-                <button id="noDelete">NO</button>
-            </div>
+  <div id="chatBar">
+      <div class="favorites">Fav 1</div>
+      <div class="favorites">Fav 2</div>
+      <div class="favorites">Fav 3</div>
+      <div class="favorites">Fav 4</div>
+      <div class="favorites">Fav 5</div>
+  </div>
 
-            <div id="sendOff">
-                <span id="forYes">Your account is deleted. We will be missing you</span>
-                <span id="forNo">Account Deletion Cancelled. Welcome Back</span>
-            </div>
+  <img src="./src/infoIcon.png" id="infoIcon">
+  <div id="info">ALL THE INFORMATION ABOUT THE WEBSITE</div>
 
-            <div id="Settings">
-                <img src="./src/setting.png" alt="Settings & Preferences" id="settingsIcon">
-                <div id="settingsPanel">
-                    <p>
-                        <span id="Delete">Delete account</span>
-                        <hr>
-                        <span id="themeSelector"><strong>Choose Theme Color:</strong></span>
-                        <div id="Themes">
-                            <input type="color" id="colorPalete">
-                            <button id="ConfirmColor">OK</button>
-                            <hr>
-                            <b id="Defalut">Default</b>
-                        </div>
-                        <hr>
-                        <span>Contact Details</span>
-                    </p>
-                </div>
-            </div>
+  <main class="ChatArea">
+      <div>
+          Chat Area
+          <div id="RequestBox">
+              Are you sure you want to Delete Account? 
+              <br><br>
+              <button id="yesDelete">YES</button>
+              <br><br>
+              <button id="noDelete">NO</button>
+          </div>
 
-            <!-- Favourites selection -->
-            <div id="favSetup">
-                <input type="email" id="favEmailInput" placeholder="Enter fav person email">
-                <select id="favSlotSelect">
-                    <option value="fav1">Fav 1</option>
-                    <option value="fav2">Fav 2</option>
-                    <option value="fav3">Fav 3</option>
-                    <option value="fav4">Fav 4</option>
-                    <option value="fav5">Fav 5</option>
-                </select>
-                <button id="setFavBtn">Set Fav</button>
-            </div>
+          <div id="sendOff">
+              <span id="forYes">Your account is deleted. We will be missing you</span>
+              <span id="forNo">Account Deletion Cancelled. Welcome Back</span>
+          </div>
 
-            <!-- Messages display -->
-            <div id="messagesBox"></div>
+          <div id="Settings">
+              <img src="./src/setting.png" alt="Settings & Preferences" id="settingsIcon">
+              <div id="settingsPanel">
+                  <p>
+                      <span id="Delete">Delete account</span>
+                      <hr>
+                      <span id="themeSelector"><strong>Choose Theme Color:</strong></span>
+                      <div id="Themes">
+                          <input type="color" id="colorPalete">
+                          <button id="ConfirmColor">OK</button>
+                          <hr>
+                          <b id="Defalut">Default</b>
+                      </div>
+                      <hr>
+                      <span>Contact Details</span>
+                  </p>
+              </div>
+          </div>
 
-            <!-- Message input -->
-            <div id="composer">
-                <input id="messageInput" placeholder="Type a message..." />
-                <button id="sendMessageBtn">Send</button>
-            </div>
-        </div>
-    </main>
+          <!-- Favourites selection -->
+          <div id="favSetup">
+              <input type="email" id="favEmailInput" placeholder="Enter fav person email">
+              <select id="favSlotSelect">
+                  <option value="fav1">Fav 1</option>
+                  <option value="fav2">Fav 2</option>
+                  <option value="fav3">Fav 3</option>
+                  <option value="fav4">Fav 4</option>
+                  <option value="fav5">Fav 5</option>
+              </select>
+              <button id="setFavBtn">Set Fav</button>
+          </div>
 
-    <!-- Scripts -->
-    <script src="app.js" defer></script>
-    <script src="./FAvChatBar/favChatBarapp.js" defer></script>
-    <script type="module" src="./Chat Area/ChatAreaapp.js" defer></script>
+          <!-- Messages display -->
+          <div id="messagesBox"></div>
+
+          <!-- Message input -->
+          <div id="composer">
+              <input id="messageInput" placeholder="Type a message..." />
+              <button id="sendMessageBtn">Send</button>
+          </div>
+      </div>
+  </main>
+
+</div>
+
+<!-- Scripts -->
+<script src="app.js" defer></script>
+<script src="./FAvChatBar/favChatBarapp.js" defer></script>
+<script type="module" src="./Chat Area/ChatAreaapp.js" defer></script>
+<script type="module" src="./userInfo/userInfoapp.js" defer></script>
+
+<script type="module">
+  // Show chat after login
+  import { auth } from './userInfo/userInfoapp.js';
+  import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.3.0/firebase-auth.js';
+
+  onAuthStateChanged(auth, (user) => {
+    if(user) {
+      document.getElementById("loginSection").style.display = "none";
+      document.getElementById("mainChatSection").style.display = "block";
+    } else {
+      document.getElementById("loginSection").style.display = "block";
+      document.getElementById("mainChatSection").style.display = "none";
+    }
+  });
+</script>
+
 </body>
 </html>
