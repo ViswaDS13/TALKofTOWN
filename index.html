@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>TALKofTOWN</title>
+
+        <link rel="stylesheet" href="style.css">
+        <!-- General page Styling-->
+
+        <link rel="stylesheet" href="./FAvChatBar/favChatBarstyle.css">
+        <!-- Favorites Chat bar Styling-->
+
+        <link rel="stylesheet" href="./Chat Area/ChatAreastyle.css">
+        <!-- Chat Area Styling-->
+
+        <link rel="stylesheet" href="./signInPage/style_signInPage.css">
+        <!-- Sign in Page Styling-->
+    </head>
+
+    <body id="backGround">
+        
+        <div id ="chatBar" class="favorites">
+            <div class="favorites"><img src="./src/favorites_temp.png" class="pfp" 
+                alt="Ur Fav"> Fav 1
+            </div>
+            <div class="favorites"><img src="./src/favorites_temp.png" class="pfp" 
+                alt="Ur Fav"> Fav 2
+            </div>
+            <div class="favorites"><img src="./src/favorites_temp.png" class="pfp" 
+                alt="Ur Fav"> Fav 3
+            </div>
+            <div class="favorites"><img src="./src/favorites_temp.png" class="pfp" 
+                alt="Ur Fav"> Fav 4
+            </div>
+            <div class="favorites"><img src="./src/favorites_temp.png" class="pfp" 
+                alt="Ur Fav"> Fav 5
+            </div>
+        </div>
+        <img src="./src/infoIcon.png" id = "infoIcon">
+        <div id="info">
+            ALL THE INFORMATION ABOUT THE WEBSITE 
+        </div>
+
+        <main class="ChatArea">
+            <div>
+                Chat Area
+                <div id="RequestBox">
+                    Are you sure you want to Delete Account? 
+                    <br><br>
+                    <button id="yesDelete">YES</button>
+                    <br><br>
+                    <button id="noDelete">NO</button>
+                </div>
+                <div id="sendOff">
+                    <span id="forYes">Your accont is deleted We will be missing you</span>
+                    <span id="forNo">Account Deletion Cancelled. Welcome Back</span>
+                </div>
+                <div id="Settings">
+                    <img src="./src/setting.png" alt="Settings & Preferences"  id="settingsIcon">
+                    <div id="settingsPanel" onclick="">
+                        <p>
+                            <span id="Delete">Delete account</span>
+                            <hr>
+                            <span id="themeSelector"><strong>Choose Theme Color:</strong></span>
+                            <div id="Themes">
+                                <input type="color" id="colorPalete"><button id="ConfirmColor">OK</button>
+                                <hr>
+                                <b id="Defalut">Default</b>
+                            </div>
+                            <hr>
+                            <span>Contact Details</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+
+
+
+        <!--SCRIPT FILES-->
+        <script src="app.js" defer></script>
+        <!--Firebase SDK script-->
+
+        <script src="./FAvChatBar/favChatBarapp.js" defer></script>
+        <!--For ChatBar script-->
+
+        <script src="./Chat Area/ChatAreaapp.js" defer></script>
+        <!--For Chat Area script-->
+
+        <script src="./signInPage/app_signInPage.js" defer></script>
+        <!--For sign-in page script-->
+    </body>
+</html>

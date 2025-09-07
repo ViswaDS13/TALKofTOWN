@@ -1,0 +1,11 @@
+body{
+  margin: 0;
+  height: 100vh;
+  font-family: Arial, sans-serif; 
+  background: linear-gradient(to left, rgb(174, 49, 49), rgb(125, 30, 117), rgb(104, 74, 203));
+  display: block;              /* use flexbox */
+  align-items: center;        /* vertical center */
+  justify-content: center;    /* horizontal center */
+  overflow: hidden;
+}
+
